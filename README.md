@@ -1,73 +1,39 @@
-# React + TypeScript + Vite
+# Munchies — Umain Work Test
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A restaurant browser built with React, TypeScript, and Vite as part of the Umain frontend work test.
 
-Currently, two official plugins are available:
+## Getting started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The app runs at `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Tech stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Tool | Version |
+|---|---|
+| React | 19.x |
+| TypeScript | 5.x |
+| Vite | 6.x |
+| Tailwind CSS | 4.x |
+| React Router DOM | 7.x |
+
+## Project structure
+
 ```
+src/
+├── api/          # All fetch calls in one place
+├── types/        # TypeScript interfaces mirroring API response shapes
+├── components/   # Stateless, reusable UI components
+├── pages/        # Stateful views — own data fetching and state
+└── App.tsx       # Routing only
+```
+
+## Notes
+
+- **Fonts** — the design uses SF Pro (Apple's system font). Font files are included in `public/fonts/`. On Apple devices the system font serves as a natural fallback even without the local files.
+- **API** — all requests hit `https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api`. No environment variables are needed.
+- **Error handling** — critical fetches (restaurants, filters) surface a full-page error with a retry button. Per-restaurant secondary requests (open status, price range) use `Promise.allSettled` and degrade gracefully rather than blocking the UI.
