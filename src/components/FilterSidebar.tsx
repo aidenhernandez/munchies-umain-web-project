@@ -1,14 +1,6 @@
 import type { Filter } from '../types';
 import { FilterPill } from './FilterPill';
-
-const DELIVERY_TIMES = [
-  { label: '0-10 min', value: '0-10' },
-  { label: '10-30 min', value: '10-30' },
-  { label: '30-60 min', value: '30-60' },
-  { label: '1 hour+', value: '60+' },
-];
-
-const PRICE_RANGES = ['$', '$$', '$$$', '$$$$'];
+import { DELIVERY_TIMES, PRICE_RANGES } from '../utils/filters';
 
 interface FilterSidebarProps {
   filters: Filter[];

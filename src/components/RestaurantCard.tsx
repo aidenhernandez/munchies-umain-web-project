@@ -1,11 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import type { Restaurant } from '../types';
-import { IMAGE_BASE } from '../api/client';
-
-function formatDeliveryTime(minutes: number): string {
-  if (minutes >= 60) return '1 hour+';
-  return `${minutes} min`;
-}
+import { formatDeliveryTime, buildImageUrl } from '../utils/formatters';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
@@ -16,7 +11,7 @@ export function RestaurantCard({ restaurant, isOpen }: RestaurantCardProps) {
   return (
     <div className="relative bg-white rounded-2xl border border-black/10 px-4 pt-4 pb-4 flex flex-col h-70 overflow-hidden">
       <img
-        src={`${IMAGE_BASE}${restaurant.image_url}`}
+        src={buildImageUrl(restaurant.image_url)}
         alt={restaurant.name}
         className={`absolute right-0 -top-8 -mr-8 h-40 w-auto object-contain z-10 pointer-events-none ${!isOpen ? 'opacity-40' : ''}`}
       />
