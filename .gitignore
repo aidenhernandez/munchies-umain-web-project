@@ -1,0 +1,15 @@
+# Dependencies — installed via npm install
+node_modules
+package-lock.json
+
+# Build output — generated via npm run build
+dist
+
+# Vite local env overrides
+*.local
+
+# macOS
+.DS_Store
+
+# Font installer — fonts are served from public/fonts/
+SF Pro Fonts.pkg

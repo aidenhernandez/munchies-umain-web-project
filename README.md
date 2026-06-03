@@ -1,70 +1,73 @@
-# Hello!
+# React + TypeScript + Vite
 
-Welcome to Umain's Work Test! This document contains the following things:
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-- Intro to the Work Test
-- Technical specifications
-- Requirements
-- API Docs
-- Design
+Currently, two official plugins are available:
 
-## Work Test Intro
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-Umain is working on setting up a new and exciting restaurant service: Munchies! For all your restaurant needs!
-We have a design ready and a backend service up and running. Now we only need a web application so that our users can find the right restaurant for them.
+## React Compiler
 
-## Requirements
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-### User stories
+## Expanding the ESLint configuration
 
-- As a user, the first time I open the website, I should see an unfiltered list of all restaurants
-- As a user, I should be able to select a filter from the sidebar or the topbar. When I select a filter, the List View should reflect the new updates
-- As a user, I should be able to select multiple filters
-- As a user, I should be able to deselect a filter by clicking on it. If I deselect any filter(s), the List View should reflect the new updates
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-### Design
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-- The web application is implemented with a responsive design, ranging from 375px wide until 1440px wide according to the design in Figma
-- Filters have a visual active state
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-## Umain's Tech Stack and YOU!
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-At Umain, our main tech stack consists of React, NextJS and TypeScript.
-For Content Management, we like to use SanityCMS.
-For styling, it is TailwindCSS and/or custom CSS.
-You can choose to host your finished product on any hosting provider, such as Google Firebase or Vercel.
-For version control, we use GitHub for all our projects.
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-For this Work Test, you can choose any tech stack you are comfortable with.
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## API Docs
-
-[API Docs](https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api-docs/)
-
-## Design
-
-You can find the [link to the design here](https://www.figma.com/file/263XJno7ii0uEaarJP9Ydw/Umain-Tech-Case?type=design&node-id=27%3A5682&mode=design&t=BPI3BgkmmHVtTdCb-1).
-There are 2 pages in Figma, called App and Web. App is used for the mobile view. Web is used for the desktop view.
-To get the right fonts, colors, sizes and more, please refer to the design in Figma. You should be able to get this info from the components and styles.
-
-## All done?
-
-:star: Awesome, great job! :star:
-The next thing is that a Umain developer will take a look at your finished web application and your code.
-Here are a few ways to get your project to us:
-
-- You could ZIP your project and send it over
-- Share it from a Cloud solution to Umain (e.g. Google Drive)
-- You could share your repo (if public) so that we can clone and install locally
-
-## Questions?
-
-Don't hesistate to contact us if you have any questions! Please send an email to either:
-
-### Sweden
-- doortje.spanjerberg@umain.com
-- viktor.asbrink@umain.com
-- herbert.cuba@umain.com
-
-### Norway
-- aswin.nalliah@umain.com
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
