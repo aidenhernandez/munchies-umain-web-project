@@ -1,6 +1,6 @@
 import type { Filter } from '../types';
-import { FilterPill } from './FilterPill';
 import { DELIVERY_TIMES, PRICE_RANGES } from '../utils/filters';
+import { FilterSection } from './FilterSection';
 
 interface FilterSidebarProps {
   filters: Filter[];
@@ -22,56 +22,32 @@ export function FilterSidebar({
   onTogglePriceRange,
 }: FilterSidebarProps) {
   return (
-    <aside className="bg-white rounded-2xl border border-black/10 p-6 w-56 shrink-0 self-start">
-      <h2 className="font-display text-2xl mb-6">Filter</h2>
+    <aside className="bg-white rounded-2xl border border-black/10 p-6 w-56 shrink-0 self-start flex flex-col gap-6">
+      <h2 className="font-display text-2xl">Filter</h2>
 
-      <div className="mb-6">
-        <p className="text-xs uppercase tracking-widest text-black/40 mb-3 font-body">
-          Food Category
-        </p>
-        <div className="flex flex-col gap-2 items-start">
-          {filters.map((filter) => (
-            <FilterPill
-              key={filter.id}
-              label={filter.name}
-              active={selectedCategories.includes(filter.id)}
-              onClick={() => onToggleCategory(filter.id)}
-            />
-          ))}
-        </div>
-      </div>
+      <FilterSection
+        title="Food Category"
+        items={filters.map((f) => ({ label: f.name, value: f.id }))}
+        selected={selectedCategories}
+        onToggle={onToggleCategory}
+        layout="column"
+      />
 
-      <div className="mb-6">
-        <p className="text-xs uppercase tracking-widest text-black/40 mb-3 font-body">
-          Delivery Time
-        </p>
-        <div className="grid grid-cols-2 gap-2">
-          {DELIVERY_TIMES.map(({ label, value }) => (
-            <FilterPill
-              key={value}
-              label={label}
-              active={selectedDeliveryTimes.includes(value)}
-              onClick={() => onToggleDeliveryTime(value)}
-            />
-          ))}
-        </div>
-      </div>
+      <FilterSection
+        title="Delivery Time"
+        items={DELIVERY_TIMES}
+        selected={selectedDeliveryTimes}
+        onToggle={onToggleDeliveryTime}
+        layout="grid"
+      />
 
-      <div>
-        <p className="text-xs uppercase tracking-widest text-black/40 mb-3 font-body">
-          Price Range
-        </p>
-        <div className="flex gap-2 flex-wrap">
-          {PRICE_RANGES.map((range) => (
-            <FilterPill
-              key={range}
-              label={range}
-              active={selectedPriceRanges.includes(range)}
-              onClick={() => onTogglePriceRange(range)}
-            />
-          ))}
-        </div>
-      </div>
+      <FilterSection
+        title="Price Range"
+        items={PRICE_RANGES.map((r) => ({ label: r, value: r }))}
+        selected={selectedPriceRanges}
+        onToggle={onTogglePriceRange}
+        layout="wrap"
+      />
     </aside>
   );
 }

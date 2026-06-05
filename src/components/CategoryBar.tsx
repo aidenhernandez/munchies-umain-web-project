@@ -1,5 +1,6 @@
 import type { Filter } from '../types';
 import { buildImageUrl } from '../utils/formatters';
+import { toggleClass } from '../utils/styles';
 
 interface CategoryBarProps {
   filters: Filter[];
@@ -16,11 +17,7 @@ export function CategoryBar({ filters, selectedCategories, onToggleCategory }: C
           <button
             key={filter.id}
             onClick={() => onToggleCategory(filter.id)}
-            className={`relative flex items-start pt-4 pl-4 pr-28 h-28 rounded-2xl border min-w-fit transition-colors cursor-pointer overflow-hidden ${
-              active
-                ? 'bg-black text-white border-black'
-                : 'bg-white text-black border-black/10 hover:border-black/30'
-            }`}
+            className={`relative flex items-start pt-4 pl-4 pr-28 h-28 rounded-2xl border min-w-fit transition-colors cursor-pointer overflow-hidden ${toggleClass(active)}`}
           >
             <span className="text-sm whitespace-nowrap">{filter.name}</span>
             <img
