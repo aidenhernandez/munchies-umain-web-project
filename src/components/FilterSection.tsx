@@ -5,13 +5,14 @@ interface FilterSectionProps {
   items: { label: string; value: string }[];
   selected: string[];
   onToggle: (value: string) => void;
-  layout?: 'column' | 'grid' | 'wrap';
+  layout?: 'column' | 'grid' | 'wrap' | 'scroll';
 }
 
 const layoutClass = {
   column: 'flex flex-col gap-2 items-start',
   grid: 'grid grid-cols-2 gap-2',
   wrap: 'flex gap-2 flex-wrap',
+  scroll: 'flex gap-2 overflow-x-auto scrollbar-none pb-1',
 };
 
 export function FilterSection({ title, items, selected, onToggle, layout = 'column' }: FilterSectionProps) {

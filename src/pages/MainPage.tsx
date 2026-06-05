@@ -1,8 +1,8 @@
 import { Header } from '../components/Header';
 import { FilterSidebar } from '../components/FilterSidebar';
 import { CategoryBar } from '../components/CategoryBar';
-import { RestaurantCard } from '../components/RestaurantCard';
-import { FilterPill } from '../components/FilterPill';
+import { RestaurantList } from '../components/RestaurantList';
+import { FilterSection } from '../components/FilterSection';
 import { MobileCategoryScroll } from '../components/MobileCategoryScroll';
 import { useRestaurantData } from '../hooks/useRestaurantData';
 import { useFilterState } from '../hooks/useFilterState';
@@ -66,40 +66,25 @@ export function MainPage() {
               onToggleCategory={toggleCategory}
             />
 
-            <h2 className="font-display text-4xl mt-8 mb-6">Restaurant's</h2>
-
-            {filteredRestaurants.length === 0 ? (
-              <p className="text-black/40 text-sm font-body">No restaurants match your filters.</p>
-            ) : (
-              <div className="grid grid-cols-3 gap-6">
-                {filteredRestaurants.map((r) => (
-                  <RestaurantCard
-                    key={r.id}
-                    restaurant={r}
-                    isOpen={openStatuses[r.id] ?? false}
-                  />
-                ))}
-              </div>
-            )}
+            <h2 className="font-display text-4xl mt-8 mb-6">Restaurants</h2>
+            <RestaurantList
+              restaurants={filteredRestaurants}
+              openStatuses={openStatuses}
+              layout="grid"
+            />
           </div>
         </div>
 
         {/* Mobile layout */}
         <div className="lg:hidden">
           <div className="mb-4">
-            <p className="text-xs uppercase tracking-widest text-black/40 mb-2 font-body">
-              Delivery Time
-            </p>
-            <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
-              {DELIVERY_TIMES.map(({ label, value }) => (
-                <FilterPill
-                  key={value}
-                  label={label}
-                  active={selectedDeliveryTimes.includes(value)}
-                  onClick={() => toggleDeliveryTime(value)}
-                />
-              ))}
-            </div>
+            <FilterSection
+              title="Delivery Time"
+              items={DELIVERY_TIMES}
+              selected={selectedDeliveryTimes}
+              onToggle={toggleDeliveryTime}
+              layout="scroll"
+            />
           </div>
 
           <MobileCategoryScroll
@@ -108,21 +93,12 @@ export function MainPage() {
             onToggleCategory={toggleCategory}
           />
 
-          <h2 className="font-display text-2xl mb-4">Restaurant's</h2>
-
-          {filteredRestaurants.length === 0 ? (
-            <p className="text-black/40 text-sm font-body">No restaurants match your filters.</p>
-          ) : (
-            <div className="flex flex-col gap-6">
-              {filteredRestaurants.map((r) => (
-                <RestaurantCard
-                  key={r.id}
-                  restaurant={r}
-                  isOpen={openStatuses[r.id] ?? false}
-                />
-              ))}
-            </div>
-          )}
+          <h2 className="font-display text-2xl mb-4">Restaurants</h2>
+          <RestaurantList
+            restaurants={filteredRestaurants}
+            openStatuses={openStatuses}
+            layout="list"
+          />
         </div>
       </div>
     </div>

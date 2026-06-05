@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { Restaurant, Filter, OpenStatus, PriceRange } from '../types';
+import type { Restaurant, Filter } from '../types';
 import { fetchRestaurants, fetchFilters, fetchOpenStatus, fetchPriceRange } from '../api/client';
 
 interface RestaurantData {
@@ -12,11 +12,22 @@ interface RestaurantData {
   retry: () => void;
 }
 
+interface DataState {
+  restaurants: Restaurant[];
+  filters: Filter[];
+  openStatuses: Record<string, boolean>;
+  priceRanges: Record<string, string>;
+}
+
+const initialData: DataState = {
+  restaurants: [],
+  filters: [],
+  openStatuses: {},
+  priceRanges: {},
+};
+
 export function useRestaurantData(): RestaurantData {
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [filters, setFilters] = useState<Filter[]>([]);
-  const [openStatuses, setOpenStatuses] = useState<Record<string, boolean>>({});
-  const [priceRanges, setPriceRanges] = useState<Record<string, string>>({});
+  const [data, setData] = useState<DataState>(initialData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -32,32 +43,29 @@ export function useRestaurantData(): RestaurantData {
         ]);
 
         if (!active) return;
-        setRestaurants(rList);
-        setFilters(fList);
 
-        const uniquePriceIds = [...new Set(rList.map((r: Restaurant) => r.price_range_id))] as string[];
+        const uniquePriceIds = [...new Set(rList.map((r) => r.price_range_id))];
 
         const [openSettled, priceSettled] = await Promise.all([
-          Promise.allSettled(rList.map((r: Restaurant) => fetchOpenStatus(r.id))),
+          Promise.allSettled(rList.map((r) => fetchOpenStatus(r.id))),
           Promise.allSettled(uniquePriceIds.map((id) => fetchPriceRange(id))),
         ]);
 
         if (!active) return;
 
-        const openMap: Record<string, boolean> = {};
+        const openStatuses: Record<string, boolean> = {};
         openSettled.forEach((result, i) => {
-          openMap[rList[i].id] = result.status === 'fulfilled' ? (result.value as OpenStatus).is_open : false;
+          openStatuses[rList[i].id] = result.status === 'fulfilled' ? result.value.is_open : false;
         });
 
-        const priceMap: Record<string, string> = {};
+        const priceRanges: Record<string, string> = {};
         priceSettled.forEach((result, i) => {
           if (result.status === 'fulfilled') {
-            priceMap[uniquePriceIds[i]] = (result.value as PriceRange).range;
+            priceRanges[uniquePriceIds[i]] = result.value.range;
           }
         });
 
-        setOpenStatuses(openMap);
-        setPriceRanges(priceMap);
+        setData({ restaurants: rList, filters: fList, openStatuses, priceRanges });
       } catch {
         if (active) setError('Failed to load restaurants. Please try again.');
       } finally {
@@ -76,5 +84,5 @@ export function useRestaurantData(): RestaurantData {
     setRetryCount((c) => c + 1);
   };
 
-  return { restaurants, filters, openStatuses, priceRanges, loading, error, retry };
+  return { ...data, loading, error, retry };
 }
